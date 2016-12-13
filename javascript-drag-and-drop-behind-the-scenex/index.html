@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html>
+	<title>HCI Hide And Drop</title>
+	<head>
+
+		<style>
+			
+			div.container {
+			    max-width: 980px;
+			    margin: 0 auto;
+			    position:relative;
+			}
+			div.header {
+			    margin: 0 auto;
+			    max-width:980px;
+			}
+			body {
+				width: 1000px;
+				height: 731px;
+			    background-image: url("background.jpg");
+			    background-size: 100% 100%;
+			    color: #333;
+			    overflow: hidden;
+			}
+			img{
+				transition: all 0.2s;
+				transform: rotateY(0);
+			}
+			img:hover{
+				/*transform: rotateY(360Deg);*/
+			}
+			.dragme {
+				/*border: 1px groove #363636; */
+				position: absolute;
+				padding: 0.5em;
+				margin: 0.5em;
+				width: 50px;
+				/*cursor: pointer;*/
+			}
+			.dragme:hover {
+				/*border: 3px groove #363636;*/
+			}
+			.blue{
+				height: 50px;
+				width: 50px;
+				position: absolute;
+				background-color: blue;
+			}
+			
+
+		</style>
+		
+	</head>
+	<body>
+		<div class="header"><h1></h1></div>
+		<div class="container">
+			<img class="dragme" src="8.png"   title="CoderExample" />
+		</div>
+		
+		<div class="container">
+			<img class="dragme" src="6.png"   title="CoderExample" />
+		</div>
+		<div class="container">
+			<img class="dragme" src="5.png"   title="CoderExample" />
+		</div>
+		<div class="container">
+			<img class="dragme" src="4.png"   title="CoderExample" />
+		</div>
+		<div class="container">
+			<img class="dragme" src="3.png"   title="CoderExample" />
+		</div>
+		<div class="container">
+			<!-- <img class="dragme" src="3.png"   title="CoderExample" style="left: 987px; top: 385px;"/> -->
+		</div>
+		<!-- <div class="blue"></div> -->
+		<!-- <script type="text/javascript">
+			var containers = document.getElementsByClassName("container");
+			console.log(containers);
+			for (var i = 0; i < containers.length; i++) {
+				var z = i * 60;
+				containers[i].style.top = z + "px"; 
+			}
+		</script> -->
+		<script type="text/javascript" src="jquery-3.1.1.js"></script>
+		<script type="text/javascript" src="jquery.js"></script>
+		<script language="JavaScript" type="text/javascript">
+		window.onload = function(){
+			var _startX = 0;			// mouse starting positions
+			var _startY = 0;
+			var _offsetX = 0;			// current element offset
+			var _offsetY = 0;
+			var _temp;			// will use as tempurarily variable OnMouseDown to OnMouseMove
+			this.onmousedown = MouseDown;
+			this.onmouseup = MouseUp;
+		}
+
+		var coordinates = {x_topleft : 1400 , y_topleft : -40 , x_bottomright : 1500 , y_bottomright : -10};
+		var coordinates2 = {x_topleft : 1365 , y_topleft : 465, x_bottomright : 1412 , y_bottomright : 515};
+		var coordinates3 = {x_topleft : 1049 , y_topleft : 390 , x_bottomright : 1099 , y_bottomright : 440};
+		var coordinates4 = {x_topleft : 636 , y_topleft : 396 , x_bottomright : 716 , y_bottomright : 446};
+		var coordinates5 = {x_topleft : 465 , y_topleft : 0 , x_bottomright : 865 , y_bottomright : 120};
+		var treecoordinates =[1140, 303, 1140, 248, 1172, 196, 1233, 154, 1290, 128, 1342, 108, 1408, 118, 1453, 146];
+		var treecoordinatesfree = [0,0,0,0,0,0,0,0];
+		var hidden_elements = [];
+		function MouseDown(e) {
+
+			// All browser takes target except IE
+			var target = e.target != null ? e.target : e.srcElement;
+			if (target.className == 'dragme') {
+			// store the mouse position
+			_startX = e.clientX;
+			_startY = e.clientY;
+	
+			// store draggable/image object position
+			_offsetX = parseInt(target.style.left);
+			_offsetX = null || isNaN(_offsetX) ? 0 : _offsetX;
+			_offsetY = parseInt(target.style.top);
+			_offsetY = null || isNaN(_offsetY) ? 0 : _offsetY;
+	
+			// tempurarily store the clicked draggable/image object on mousemove
+			_temp = target;
+
+			// call mousemove function on mousemove event.
+			window.onmousemove = MouseMove;
+			return false;
+			}
+			
+		}
+
+		function MouseMove(e) {
+			if (e == null) 
+			var e = window.event; 
+			// replacing dragged location left & top on draggable/image object
+			_temp.style.left = (_offsetX + e.clientX - _startX) + 'px';
+			_temp.style.top = (_offsetY + e.clientY - _startY) + 'px';
+		}
+
+		function MouseUp(e) {
+			if (_temp != null) {
+				// we'll not capture any location on mouse release, as our dragging is complete now.  
+				window.onmousemove = null;
+				var x = _offsetX + e.clientX - _startX;
+				var y = _offsetY + e.clientY - _startY;
+				console.log(x+" , "+y);
+				_temp = null;
+				if(x > coordinates.x_topleft && x < coordinates.x_bottomright && y > coordinates.y_topleft && y < coordinates.y_bottomright){
+					console.log("should disappear");
+					var target = e.target != null ? e.target : e.srcElement;
+					target.style.visibility = "hidden";
+					hidden_elements[hidden_elements.length] = target;
+				}
+				if(x > coordinates2.x_topleft && x < coordinates2.x_bottomright && y > coordinates2.y_topleft && y < coordinates2.y_bottomright){
+					console.log("should disappear");
+					var target = e.target != null ? e.target : e.srcElement;
+					var j = 0;
+					for(j = 0; j < treecoordinatesfree.length && treecoordinatesfree[j] == 1; j++){
+					}
+					treecoordinatesfree[j] = 1;
+					j = j*2;
+					target.style.left = treecoordinates[j]+ 'px';
+					target.style.top = treecoordinates[j+1] + 'px';
+					
+
+				}
+				if(x > coordinates3.x_topleft && x < coordinates3.x_bottomright && y > coordinates3.y_topleft && y < coordinates3.y_bottomright){
+					var target = e.target != null ? e.target : e.srcElement;
+					// target.style.visibility = "hidden";
+					var copy = e.srcElement;
+					// copy.css("top","385px");
+					// copy.css("left","987");
+					// copy.style.top = 385;
+					// copy.style.left = 987;
+					// console.log(copy);
+					var body = $("body");
+					var container = $(".container");
+					//e.srcElement.clone();
+					$(copy).clone().appendTo(body);
+					var body = $("body");
+					body.children().last().css("top","458px");
+					body.children().last().css("left","986px");
+					//container.last().html('<img class="dragme" src="3.png"   title="CoderExample" style="left: 972px; top: 376px;"/>');
+					// container.last().append(copy);
+
+					// console.log(copy);
+					// var html = '<div class="container">'+copy.html()+'</div>'
+					// var string = body.html();
+					// alert(string+" hi");
+					// body.prepend(html);
+					// var bodyHtml = body.innerHTML;
+					// bodyHtml += copy.innerHTML;
+					// body.innerHTML = bodyHtml; 
+					// body.appendChild();
+					// console.log(body.toString());
+					// hidden_elements[hidden_elements.length] = target;
+				}
+				if(x > coordinates4.x_topleft && x < coordinates4.x_bottomright && y > coordinates4.y_topleft && y < coordinates4.y_bottomright){
+					var target = e.target != null ? e.target : e.srcElement;
+					target.style.visibility = "hidden";
+					hidden_elements[hidden_elements.length] = target;
+				}
+				if(x > coordinates5.x_topleft && x < coordinates5.x_bottomright && y > coordinates5.y_topleft && y < coordinates5.y_bottomright){
+					var target = e.target != null ? e.target : e.srcElement;
+					target.style.opacity = "0.2";
+					// hidden_elements[hidden_elements.length] = target;
+				}
+				if(x <= coordinates5.x_topleft || x >= coordinates5.x_bottomright || y <= coordinates5.y_topleft || y >= coordinates5.y_bottomright){
+					var target = e.target != null ? e.target : e.srcElement;
+					target.style.opacity = "1";
+				}
+			}
+			else{
+				
+					var x = _offsetX + e.clientX - _startX;
+					var y = _offsetY + e.clientY - _startY;
+					if(x > coordinates.x_topleft && x < coordinates.x_bottomright && y > coordinates.y_topleft && y < coordinates.y_bottomright){
+						hidden_elements.pop().style.visibility = "visible";
+					}
+			}
+		}
+		</script>
+	</body>
+</html>
